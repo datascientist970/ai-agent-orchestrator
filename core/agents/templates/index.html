@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agentic AI · neural execution core</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+  {% load static %}
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: radial-gradient(circle at 20% 30%, #0f172a, #030614);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      color: #eef2fb;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* animated circuit lines */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: 
+        repeating-linear-gradient(0deg, rgba(0, 255, 255, 0.02) 0px, transparent 2px, transparent 40px),
+        repeating-linear-gradient(90deg, rgba(148, 0, 255, 0.02) 0px, transparent 2px, transparent 40px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      padding-top: 2rem;
+      padding-bottom: 4rem;
+    }
+
+    /* holographic title */
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 800;
+      font-size: 2.8rem;
+      text-transform: uppercase;
+      letter-spacing: 6px;
+      text-align: center;
+      background: linear-gradient(135deg, #a0f0ff, #c07cff, #6ee7ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 20px #00f7ff);
+      animation: titlePulse 3s infinite alternate;
+      margin-bottom: 0.5rem;
+    }
+
+    @keyframes titlePulse {
+      0% { filter: drop-shadow(0 0 15px #00f7ff); letter-spacing: 6px; }
+      100% { filter: drop-shadow(0 0 30px #b47cff); letter-spacing: 8px; }
+    }
+
+    /* glassmorphic card */
+    .card-glow {
+      background: rgba(12, 18, 34, 0.65);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      border-radius: 40px;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 255, 255, 0.2) inset, 0 0 40px rgba(100, 0, 255, 0.2);
+      transition: all 0.3s ease;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .card-glow:hover {
+      border-color: rgba(150, 100, 255, 0.6);
+      box-shadow: 0 30px 60px #000, 0 0 30px #6e3bff;
+    }
+
+    /* cyberpunk label */
+    .form-label {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #9dd6ff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.2rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .form-label i {
+      font-size: 2rem;
+      color: #0ff;
+      filter: drop-shadow(0 0 10px cyan);
+    }
+
+    /* neural input field */
+    .neuro-input {
+      background: rgba(0, 5, 15, 0.7) !important;
+      border: 2px solid #2d4b7c;
+      border-radius: 30px;
+      color: #e9f3ff;
+      font-size: 1.1rem;
+      padding: 1.3rem 1.8rem;
+      backdrop-filter: blur(8px);
+      box-shadow: inset 0 4px 20px #00000080, 0 0 25px #0044ff40;
+      transition: all 0.25s;
+      resize: vertical;
+      width: 100%;
+    }
+
+    .neuro-input:focus {
+      border-color: #0ff;
+      outline: none;
+      box-shadow: inset 0 4px 20px #000, 0 0 35px #00b4ff, 0 0 15px #a06eff;
+      background: rgba(4, 12, 28, 0.9) !important;
+    }
+
+    /* advanced execute button */
+    .btn-primary-ai {
+      background: linear-gradient(135deg, #002c5f, #14004e);
+      border: 2px solid #4bb4ff;
+      color: white;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      border-radius: 60px;
+      font-size: 1.3rem;
+      box-shadow: 0 0 30px #0055ff, 0 6px 15px black;
+      backdrop-filter: blur(4px);
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      width: 100%;
+      margin-top: 1.8rem;
+    }
+
+    .btn-primary-ai i {
+      font-size: 1.8rem;
+      filter: drop-shadow(0 0 8px cyan);
+      transition: 0.2s;
+    }
+
+    .btn-primary-ai:hover {
+      background: linear-gradient(135deg, #003d7a, #220074);
+      border-color: #f0f;
+      box-shadow: 0 0 45px #00a6ff, 0 0 25px #a55aff;
+      transform: scale(1.02);
+    }
+
+    .btn-primary-ai:hover i {
+      transform: rotate(5deg) scale(1.1);
+    }
+
+    /* results container */
+    .result-card {
+      margin-top: 2.5rem;
+      border-radius: 48px;
+      padding: 2.5rem;
+      background: rgba(8, 14, 28, 0.7);
+      border: 1px solid rgba(0, 255, 255, 0.25);
+      animation: slideUp 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+
+    @keyframes slideUp {
+      0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* neural step headers */
+    .step-header {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 600;
+      font-size: 1.4rem;
+      margin: 1.8rem 0 0.8rem 0;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 2px solid #2f5f9f;
+      padding-bottom: 0.6rem;
+      color: #c3e3ff;
+    }
+
+    .step-header i {
+      font-size: 2.2rem;
+      background: #13233f;
+      padding: 10px;
+      border-radius: 50%;
+      box-shadow: 0 0 20px #0ff;
+    }
+
+    /* output pre with terminal feel */
+    .output-pre {
+      background: #030b17e0;
+      border: 1px solid #3f6790;
+      border-left: 8px solid #00e0ff;
+      border-radius: 28px;
+      padding: 1.5rem;
+      font-family: 'Inter', monospace;
+      font-size: 1rem;
+      color: #cde4ff;
+      white-space: pre-wrap;
+      word-break: break-word;
+      box-shadow: inset 0 0 40px #000a1a, 0 12px 25px black;
+      margin-bottom: 1rem;
+    }
+
+    /* different colors for each agent type */
+    .planner-output { border-left-color: #00e0ff; }
+    .worker-output { border-left-color: #ffb347; }
+    .evaluator-output { border-left-color: #6effa5; }
+    .final-output { border-left-color: #e066ff; }
+
+    /* task id badge */
+    .task-badge {
+      background: #102135;
+      border-radius: 60px;
+      padding: 10px 28px;
+      font-family: 'Orbitron', sans-serif;
+      border: 1.5px solid #0ff;
+      box-shadow: 0 0 20px #00b7ff;
+      display: inline-block;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    /* status badge */
+    .status-badge {
+      background: #1a2a3a;
+      border-radius: 30px;
+      padding: 8px 20px;
+      font-family: 'Orbitron', sans-serif;
+      border: 1px solid #6effa5;
+      color: #6effa5;
+    }
+
+    .status-badge.completed { border-color: #6effa5; color: #6effa5; }
+    .status-badge.processing { border-color: #ffb347; color: #ffb347; animation: pulse 1.5s infinite; }
+
+    @keyframes pulse {
+      0% { opacity: 0.7; }
+      50% { opacity: 1; }
+      100% { opacity: 0.7; }
+    }
+
+    /* divider */
+    .divider-neural {
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #0ff, #c17eff, #0ff, transparent);
+      margin: 2rem 0;
+      filter: blur(1px);
+    }
+
+    /* memory context styling */
+    .memory-context {
+      background: #0a1424;
+      border-radius: 20px;
+      padding: 1rem;
+      margin: 1rem 0;
+      border: 1px dashed #4a6fa5;
+      font-size: 0.9rem;
+      color: #8bb9ff;
+    }
+
+    .memory-context i {
+      color: #0ff;
+      margin-right: 8px;
+    }
+
+    /* responsive */
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; letter-spacing: 3px; }
+    }
+
+    /* glitch effect on icons */
+    .fa-microchip, .fa-robot {
+      animation: glitch 5s infinite;
+    }
+
+    @keyframes glitch {
+      2%, 6% { transform: skew(2deg, 1deg); filter: hue-rotate(30deg); }
+      4% { transform: skew(-2deg, -1deg); filter: hue-rotate(-30deg); }
+    }
+
+    /* timestamp style */
+    .timestamp {
+      font-size: 0.85rem;
+      color: #6b8eb3;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Title with icons -->
+    <div class="d-flex align-items-center justify-content-center gap-3 flex-wrap">
+      <i class="fas fa-microchip fa-3x" style="color: #4ef2ff; filter: drop-shadow(0 0 15px blue);"></i>
+      <h1>Agentic AI Core</h1>
+      <i class="fas fa-robot fa-3x" style="color: #c97bff; filter: drop-shadow(0 0 15px #8a2be2);"></i>
+    </div>
+
+    <!-- Subtle tagline -->
+    <p class="text-center mb-5" style="color: #8fb9f0; font-size: 1.2rem; letter-spacing: 2px;">
+      <i class="fas fa-bolt me-2" style="color: cyan;"></i> autonomous swarm · recursive reasoning · neuro-symbolic execution
+    </p>
+
+    <!-- Input Card -->
+    <div class="card-glow">
+      <form method="POST" action="{% url 'home' %}">
+        {% csrf_token %}
+        <div class="form-label">
+          <i class="fas fa-brain"></i> primary directive / objective
+        </div>
+        <textarea name="user_input" id="user_input" class="neuro-input" rows="4" placeholder="e.g., design autonomous trading agent, analyze protein structures, optimize supply chain..." required>{{ user_input|default:'' }}</textarea>
+        <button type="submit" class="btn-primary-ai">
+          <i class="fas fa-play-circle"></i> execute agent swarm <i class="fas fa-arrow-right"></i>
+        </button>
+      </form>
+    </div>
+
+    {% if task %}
+    <!-- Results Container (dynamic from Django) -->
+    <div id="resultsContainer" class="card-glow result-card">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <span class="task-badge">
+          <i class="fas fa-hashtag me-2"></i>TASK #{{ task.id }}
+        </span>
+        <span class="status-badge {% if task.status == 'completed' %}completed{% else %}processing{% endif %}">
+          <i class="fas fa-{% if task.status == 'completed' %}check-circle{% else %}cog fa-spin{% endif %} me-2"></i>
+          {{ task.status|upper }}
+        </span>
+      </div>
+
+      <div class="timestamp">
+        <i class="fas fa-clock"></i> initiated: {{ task.created_at|date:"Y-m-d H:i:s" }}
+      </div>
+
+      <div class="divider-neural"></div>
+
+      {% for step in agent_steps %}
+        <!-- Agent Step -->
+        <div class="step-header">
+          {% if step.agent_name == "Planner" %}
+            <i class="fas fa-clipboard-list" style="color: #0ff;"></i> 📋 PLANNER OUTPUT
+          {% elif step.agent_name == "Worker" %}
+            <i class="fas fa-cogs" style="color: #ffb347;"></i> 🤖 WORKER OUTPUT
+          {% elif step.agent_name == "Evaluator" %}
+            <i class="fas fa-check-double" style="color: #6effa5;"></i> ✅ EVALUATOR OUTPUT
+          {% endif %}
+        </div>
+        
+        {% if step.input_data and step.agent_name == "Worker" %}
+        <div class="memory-context">
+          <i class="fas fa-database"></i> <strong>memory context retrieved:</strong>
+          <pre style="background: transparent; border: none; color: #8bb9ff; padding: 0.5rem 0; margin: 0; font-size: 0.9rem;">{{ step.input_data }}</pre>
+        </div>
+        {% endif %}
+        
+        <pre class="output-pre {% if step.agent_name == 'Planner' %}planner-output{% elif step.agent_name == 'Worker' %}worker-output{% elif step.agent_name == 'Evaluator' %}evaluator-output{% endif %}">{{ step.output_data }}</pre>
+        
+        <div class="timestamp" style="justify-content: flex-end;">
+          <i class="fas fa-check-circle" style="color: #6effa5;"></i> completed: {{ step.created_at|date:"H:i:s" }}
+        </div>
+      {% endfor %}
+
+      <div class="divider-neural"></div>
+
+      <!-- Final Output -->
+      <div class="step-header">
+        <i class="fas fa-flag-checkered" style="color: #ff83d8;"></i> 🏁 FINAL CONSOLIDATION
+      </div>
+      <pre class="output-pre final-output">{{ task.final_output }}</pre>
+      
+      <div class="timestamp" style="justify-content: flex-end;">
+        <i class="fas fa-check-double" style="color: #ff83d8;"></i> finalized: {{ task.updated_at|date:"H:i:s" }}
+      </div>
+
+      <!-- Memory summary (optional) -->
+      {% if agent_steps|length > 0 %}
+      <div class="mt-4 p-3" style="background: #0c1428; border-radius: 20px; border: 1px solid #2f4f7f;">
+        <div class="d-flex align-items-center gap-2">
+          <i class="fas fa-brain" style="color: #c97bff;"></i>
+          <span style="font-family: 'Orbitron'; color: #c97bff;">AGENT SWARM METRICS</span>
+        </div>
+        <div class="row mt-2 text-center">
+          <div class="col-4">
+            <div style="color: #0ff;">{{ agent_steps.0.created_at|timesince }}</div>
+            <small style="color: #8ba9d0;">execution time</small>
+          </div>
+          <div class="col-4">
+            <div style="color: #6effa5;">{{ agent_steps|length }}</div>
+            <small style="color: #8ba9d0;">agents activated</small>
+          </div>
+          <div class="col-4">
+            <div style="color: #ffb347;">{{ task.final_output|length }}</div>
+            <small style="color: #8ba9d0;">output length</small>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- footer -->
+    <div class="text-center mt-4 opacity-50" style="color: #7ea9d9;">
+      <i class="fas fa-satellite-dish me-2"></i> autonomous orchestration · real-time reflection · v2.6.1
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Auto-resize textarea
+    const textarea = document.getElementById('user_input');
+    if (textarea) {
+      textarea.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+      });
+    }
+
+    // Smooth scroll to results if they exist
+    {% if task %}
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        document.getElementById('resultsContainer').scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }, 300);
+    });
+    {% endif %}
+
+    // Add copy buttons to pre blocks (optional)
+    document.querySelectorAll('.output-pre').forEach(pre => {
+      pre.addEventListener('dblclick', function() {
+        navigator.clipboard.writeText(this.textContent).then(() => {
+          // Show brief tooltip
+          const tooltip = document.createElement('div');
+          tooltip.textContent = '✓ copied to clipboard';
+          tooltip.style.position = 'fixed';
+          tooltip.style.top = '20px';
+          tooltip.style.right = '20px';
+          tooltip.style.background = '#0ff';
+          tooltip.style.color = '#000';
+          tooltip.style.padding = '10px 20px';
+          tooltip.style.borderRadius = '30px';
+          tooltip.style.fontFamily = 'Orbitron';
+          tooltip.style.zIndex = '9999';
+          tooltip.style.boxShadow = '0 0 30px cyan';
+          document.body.appendChild(tooltip);
+          setTimeout(() => tooltip.remove(), 2000);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
