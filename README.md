@@ -1,6 +1,7 @@
 # Agentic AI Platform
 
-![Agentic AI Logo](https://via.placeholder.com/300x100?text=Agentic+AI)
+![Agentic AI Logo](https://dummyimage.com/300x100/0b0d14/ffffff&text=Agentic+AI)
+
 
 **Agentic AI** is an advanced autonomous agent orchestration platform built with **Django**, **Bootstrap 5**, and **Google Gemini 2.5 Flash API**, capable of executing recursive agent pipelines with memory support (RAG) for research, analysis, and automation tasks.
 
@@ -129,7 +130,3 @@ GEN_MODEL = "models/gemini-2.5-flash"
 * Interactive dashboard for task analytics and memory inspection.
 
 ---
-
-
-
-Do you want me to do that next?
